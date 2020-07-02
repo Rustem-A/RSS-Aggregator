@@ -5,12 +5,6 @@ language: node_js
 node_js:
   - stable
 
-SURGE_LOGIN:
-  faustyanishe@gmail.com
-
-SURGE_TOKEN:
-  d62d70fdb5b788a15853089e639d48aa
-
 env:
   global:
     - CC_TEST_REPORTER_ID=54c8c2c98c903ff7c63996bf5ef486cb7f56b952f44a9e16a0b17e09dc7514b4
@@ -18,7 +12,7 @@ env:
 deploy:
   provider: surge
   project: ./dist/
-  # domain: example.surge.sh
+  domain: rss_aggregator.surge.sh
   skip_cleanup: true
 
 before_script:
