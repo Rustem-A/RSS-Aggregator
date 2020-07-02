@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>RSS</title>
+  </head>
+  <body>
+  <div>
+   <div class="jumbotron">
+    <h1 class="display-4">RSS Reader</h1>
+    <p class="lead">This is an "RSS Reader" project on Hexlet</p>
+    <hr class="my-4">
+    <form>
+      <div class="col=12">
+        <label for="inputForLink" id="userInformation" class="text-success">. </label>
+      </div>
+         <div class="form-row">
+           <div class="col-4 ">
+             <input value="" type="text" class="form-control" id="inputForLink" placeholder="Enter link">
+           </div>
+           <div class="col-auto">
+             <button type="submit"disabled class="btn btn-outline-secondary">ADD Link</button>
+           </div>
+         </div>
+       </form>
+        <hr class="my-4">
+  </div>
+</div>
+<div id="articleLists">
+</div>
+<div class="modal" id="modal" tabindex="-1" role="dialog">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 id="titleModal"></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+         x
+        </button>
+      </div>
+      <div class="modal-body">
+      <p class="modal-body" id="descriptionModal"></ p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+  </body>
+</html>
