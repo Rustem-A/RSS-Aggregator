@@ -29,6 +29,6 @@ before_script:
 script:
   - make lint
   - make test-coverage
-
+  - npm run webpack
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
