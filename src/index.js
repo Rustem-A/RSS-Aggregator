@@ -1,7 +1,5 @@
-export default (text) => {
-    let res = '';
-    for(let i = text.length - 1; i >= 0; i--) {
-        res += text[i];
-    }
-    return res;
-  };
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
+import app from './app';
+
+app();
