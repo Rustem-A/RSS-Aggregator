@@ -10,7 +10,9 @@ export default () => {
     const state = {
         userInformation: '',
         inputProcess: {
+            disabledInput: false,
             submitDisabled: true,
+            valid: '',
         }
     };
 
@@ -20,9 +22,11 @@ export default () => {
         if(!validator.isURL(e.target.value)) {
             state.inputProcess.submitDisabled = true;
             state.userInformation = 'invalid url format danger';
+            state.inputProcess.valid = 'invalid';
         } else {
             state.inputProcess.submitDisabled = false;
             state.userInformation = '';
+            state.inputProcess.valid = 'valid';
         }
     });
 
@@ -30,8 +34,10 @@ export default () => {
     axios.get(`${proxyLink}mk.ru/rss/news/index.xml`, { headers: { 'Access-Control-Allow-Origin': '*' } })
     .then(({ data }) => {
         const dataDocument = parseRss(data, 'mk.ru/rss/news/index.xml');
+        console.log(dataDocument);
     });
 
     watch(state, 'inputProcess', () => renders.submitDisabled(state));
     watch(state, () => renders.userInformation(state));
+    watch(state, 'inputProcess', () => renders.inputEvent(state));
 };
