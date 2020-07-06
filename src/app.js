@@ -25,6 +25,10 @@ export default () => {
             state.inputProcess.submitDisabled = true;
             state.userInformation = 'invalid url format danger';
             state.inputProcess.valid = 'invalid';
+        } else if (state.articleLinks.has(inputForLink.value)) {
+            state.userInformation = 'A channel with such url has already been added danger';
+            state.inputProcess.valid = 'invalid';
+            state.inputProcess.disabledSubmit = true;
         } else {
             state.inputProcess.submitDisabled = false;
             state.userInformation = '';
@@ -42,7 +46,6 @@ export default () => {
         axios.get(`${proxyLink}${inputForLink.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
         .then(({ data }) => {
             const dataDocument = parseRss(data, inputForLink.value);
-            console.log(data);
             state.channels = [dataDocument, ...state.channels];
         })
         .then(() => {
@@ -62,4 +65,5 @@ export default () => {
     watch(state, 'inputProcess', () => renders.submitDisabled(state));
     watch(state, () => renders.userInformation(state));
     watch(state, 'inputProcess', () => renders.inputEvent(state));
+    watch(state, 'channels', () => renders.channel(state));
 };

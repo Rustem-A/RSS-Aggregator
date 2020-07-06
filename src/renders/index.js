@@ -1,5 +1,6 @@
 import submitDisabled from './submitDisabled.js';
 import userInformation from './userInformation.js';
 import inputEvent from './inputEvent.js';
+import channel from './channel.js';
 
-export { submitDisabled, userInformation, inputEvent };
+export { submitDisabled, userInformation, inputEvent, channel };
