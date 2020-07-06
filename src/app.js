@@ -1,7 +1,7 @@
 import validator from 'validator';
 import axios from 'axios';
 import { watch } from 'melanke-watchjs';
-// import $ from 'jquery';
+import $ from 'jquery';
 
 import * as renders from './renders/index.js';
 import parseRss from './parsers/parseRss';
@@ -16,6 +16,10 @@ export default () => {
         },
         channels: [],
         articleLinks: new Set(),
+        modal: {
+            title: '',
+            description: '',
+        }
     };
 
     const inputForLink = document.body.querySelector('#inputForLink');
@@ -62,8 +66,23 @@ export default () => {
           });
     });
 
+    const modalHandlers = {
+        showModalText: (event) => {
+            const button = $(event.relatedTarget);
+            state.modal.title = button.data('title');
+            state.modal.description = button.data('description');
+        },
+        hideModalText: () => {
+            state.modal.description = '';
+        },
+    };
+    $('#modal')
+    .on('show.bs.modal', modalHandlers.showModalText)
+    .on('hide.bs.modal', modalHandlers.hideModalText);
+
     watch(state, 'inputProcess', () => renders.submitDisabled(state));
     watch(state, () => renders.userInformation(state));
     watch(state, 'inputProcess', () => renders.inputEvent(state));
     watch(state, 'channels', () => renders.channel(state));
+    watch(state, 'modal', () => renders.modalContent(state));
 };
