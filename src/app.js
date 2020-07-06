@@ -10,10 +10,12 @@ export default () => {
     const state = {
         userInformation: '',
         inputProcess: {
-            disabledInput: false,
+            inputDisabled: false,
             submitDisabled: true,
             valid: '',
-        }
+        },
+        channels: [],
+        articleLinks: new Set(),
     };
 
     const inputForLink = document.body.querySelector('#inputForLink');
@@ -30,11 +32,31 @@ export default () => {
         }
     });
 
-    const proxyLink = 'https://cors-anywhere.herokuapp.com/';
-    axios.get(`${proxyLink}mk.ru/rss/news/index.xml`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-    .then(({ data }) => {
-        const dataDocument = parseRss(data, 'mk.ru/rss/news/index.xml');
-        console.log(dataDocument);
+    const form = document.body.querySelector('form');
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        state.inputProcess.submitDisabled = true;
+        state.inputProcess.inputDisabled = true;
+        state.userInformation = 'please, standby';
+        const proxyLink = 'https://cors-anywhere.herokuapp.com/';
+        axios.get(`${proxyLink}${inputForLink.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+        .then(({ data }) => {
+            const dataDocument = parseRss(data, inputForLink.value);
+            console.log(data);
+            state.channels = [dataDocument, ...state.channels];
+        })
+        .then(() => {
+            state.articleLinks.add(inputForLink.value);
+            state.inputProcess.inputDisabled = false;
+            state.inputProcess.submitDisabled = false;
+            state.userInformation = 'Loaded';
+          })
+        .catch((err) => {
+            state.userInformation = 'Oops, something went wrong danger';
+            state.inputProcess.disabledInput = false;
+            state.inputProcess.disabledSubmit = true;
+            console.log(err);
+          });
     });
 
     watch(state, 'inputProcess', () => renders.submitDisabled(state));

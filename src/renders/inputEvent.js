@@ -1,6 +1,6 @@
 export default ({ inputProcess }) => {
     const inputForLink = document.getElementById('inputForLink');
-    inputForLink.disabled = inputProcess.disabledInput;
+    inputForLink.disabled = inputProcess.inputDisabled;
 
     switch(inputProcess.valid) {
         case '':
