@@ -1,3 +1,4 @@
 import submitDisabled from './submitDisabled.js';
+import userInformation from './userInformation.js';
 
-export { submitDisabled, };
+export { submitDisabled, userInformation };

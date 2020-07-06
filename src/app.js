@@ -8,6 +8,7 @@ import parseRss from './parsers/parseRss';
 
 export default () => {
     const state = {
+        userInformation: '',
         inputProcess: {
             submitDisabled: true,
         }
@@ -18,17 +19,19 @@ export default () => {
         e.preventDefault();
         if(!validator.isURL(e.target.value)) {
             state.inputProcess.submitDisabled = true;
+            state.userInformation = 'invalid url format danger';
         } else {
             state.inputProcess.submitDisabled = false;
+            state.userInformation = '';
         }
     });
 
     const proxyLink = 'https://cors-anywhere.herokuapp.com/';
-    axios.get(`${proxyLink}lorem-rss.herokuapp.com/feed`, { headers: { 'Access-Control-Allow-Origin': '*' } })
+    axios.get(`${proxyLink}mk.ru/rss/news/index.xml`, { headers: { 'Access-Control-Allow-Origin': '*' } })
     .then(({ data }) => {
         const dataDocument = parseRss(data, 'mk.ru/rss/news/index.xml');
-        console.log(dataDocument);
     });
 
     watch(state, 'inputProcess', () => renders.submitDisabled(state));
+    watch(state, () => renders.userInformation(state));
 };
