@@ -1,20 +1,21 @@
 export default ({ channels }) => {
-    const div = document.getElementById('articleLists');
-    const ul = document.createElement('ul');
-    ul.classList.add('list-group');
-    const li = document.createElement('li');
-    li.classList.add('list-group-item');
+    const div = document.getElementById('navbar-example2');
+    const divData = document.getElementById('navbar-example2-data');
+    div.innerHTML = '';
+    divData.innerHTML = '';
     channels.forEach(({ channelTitle, linkChannel, news }) => {
-      li.innerHTML = `
-      <div class="jumbotron text-left">
-        <div class="container">
-          <h2 class="jumbotron-heading">Channel:</h2>
-          <p class="lead text-muted">${channelTitle}</p>
-          <p> <a href="${linkChannel}" class="btn btn-secondary my-2">Go to channel</a></p>  
-       </div>
-      </div>
-    
-     <div class="album py-5 bg-light">
+        const liEl = document.createElement('li');
+        liEl.classList.add('nav-item');
+        liEl.innerHTML = `<a class="nav-link" href="#${linkChannel}">${channelTitle}</a>`;
+        div.append(liEl);
+
+        const h4El = document.createElement('h4');
+        h4El.setAttribute('id', `${linkChannel}`);
+        h4El.textContent = channelTitle;
+        divData.append(h4El);
+        
+        const divDiv = document.createElement('div');
+        divDiv.innerHTML = `<div class="album py-5 bg-light">
         <div class="container">
           <div class="row">
           ${news.map(({ titleText, descriptionText, linkText }) => `
@@ -36,8 +37,6 @@ export default ({ channels }) => {
           </div>
         </div>
       </div>`;
-      ul.appendChild(li);
-      div.appendChild(ul);
+      divData.append(divDiv);
     });
-  };
-  
+};

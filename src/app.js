@@ -19,7 +19,8 @@ export default () => {
         modal: {
             title: '',
             description: '',
-        }
+        },
+        updateChannel: false,
     };
 
     const inputForLink = document.body.querySelector('#inputForLink');
@@ -57,6 +58,7 @@ export default () => {
             state.inputProcess.inputDisabled = false;
             state.inputProcess.submitDisabled = false;
             state.userInformation = 'Loaded';
+            state.updateChannel = true;
           })
         .catch((err) => {
             state.userInformation = 'Oops, something went wrong danger';
@@ -66,19 +68,12 @@ export default () => {
           });
     });
 
-    const modalHandlers = {
-        showModalText: (event) => {
-            const button = $(event.relatedTarget);
-            state.modal.title = button.data('title');
-            state.modal.description = button.data('description');
-        },
-        hideModalText: () => {
-            state.modal.description = '';
-        },
-    };
     $('#modal')
-    .on('show.bs.modal', modalHandlers.showModalText)
-    .on('hide.bs.modal', modalHandlers.hideModalText);
+    .on('show.bs.modal', (event) => {
+        const button = $(event.relatedTarget);
+        state.modal.title = button.data('title');
+        state.modal.description = button.data('description');
+    });
 
     watch(state, 'inputProcess', () => renders.submitDisabled(state));
     watch(state, () => renders.userInformation(state));

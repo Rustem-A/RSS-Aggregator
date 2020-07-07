@@ -1,6 +1,4 @@
 export default ({ modal }) => {
-    const modalLabel = document.getElementById('descriptionModal');
-    const modalTitle = document.getElementById('titleModal');
-    modalLabel.textContent = modal.description;
-    modalTitle.textContent = modal.title;
+    document.getElementById('descriptionModal').textContent = modal.description;
+    document.getElementById('titleModal').textContent = modal.title;
 };
