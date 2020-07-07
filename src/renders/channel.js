@@ -11,6 +11,7 @@ export default ({ channels }) => {
 
         const h4El = document.createElement('h4');
         h4El.setAttribute('id', `${linkChannel}`);
+        h4El.classList.add('text-center');
         h4El.textContent = channelTitle;
         divData.append(h4El);
         

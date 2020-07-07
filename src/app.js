@@ -47,6 +47,7 @@ export default () => {
         state.inputProcess.submitDisabled = true;
         state.inputProcess.inputDisabled = true;
         state.userInformation = 'please, standby';
+        state.spinner = true;
         const proxyLink = 'https://cors-anywhere.herokuapp.com/';
         axios.get(`${proxyLink}${inputForLink.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
         .then(({ data }) => {
@@ -57,6 +58,7 @@ export default () => {
             state.articleLinks.add(inputForLink.value);
             state.inputProcess.inputDisabled = false;
             state.inputProcess.submitDisabled = false;
+            state.spinner = false;
             state.userInformation = 'Loaded';
             state.updateChannel = true;
           })
@@ -64,6 +66,7 @@ export default () => {
             state.userInformation = 'Oops, something went wrong danger';
             state.inputProcess.disabledInput = false;
             state.inputProcess.disabledSubmit = true;
+            state.spinner = false;
             console.log(err);
           });
     });
