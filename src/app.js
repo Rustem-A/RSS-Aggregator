@@ -5,6 +5,7 @@ import $ from 'jquery';
 
 import * as renders from './renders/index.js';
 import parseRss from './parsers/parseRss';
+import scrollUp from './scrollUp.js';
 
 export default () => {
     const state = {
@@ -40,6 +41,8 @@ export default () => {
         }
     };
 
+    scrollUp();
+    
     const inputForLink = document.body.querySelector('#inputForLink');
     inputForLink.addEventListener('input', (e) => {
         e.preventDefault();
