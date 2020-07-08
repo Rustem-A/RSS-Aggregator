@@ -21,16 +21,16 @@ export default () => {
             description: '',
         },
         updateChannel: false,
-        submitClick: false,
+        exampelButtons: 'active',
     };
 
     const validate = () => {
         if (!validator.isURL(inputForLink.value)) {
             state.inputProcess.submitDisabled = true;
-            state.userInformation = 'invalid url format danger';
+            state.userInformation = 'invalid URL format danger';
             state.inputProcess.valid = 'invalid';
         } else if (state.articleLinks.has(inputForLink.value)) {
-            state.userInformation = 'A channel with such url has already been added danger';
+            state.userInformation = 'A channel with such URL has already been added danger';
             state.inputProcess.valid = 'invalid';
             state.inputProcess.submitDisabled = true;
         } else {
@@ -48,18 +48,16 @@ export default () => {
 
     const btnLink1 = document.getElementById('Examle#1');
     const btnLink2 = document.getElementById('Examle#2');
-    const handlerForBtnLink = (url, target) => {
+    const handlerForBtnLink = (url) => {
         inputForLink.focus();
         inputForLink.value = url;
         validate();
-        target.setAttribute('disabled', '');
-        document.querySelector('#submit').click();
     };
-    btnLink1.addEventListener('click', (e) => {
-        handlerForBtnLink('https://lenta.ru/rss/news', e.target);
+    btnLink1.addEventListener('click', () => {
+        handlerForBtnLink('https://lenta.ru/rss/news');
     });
-    btnLink2.addEventListener('click', (e) => {
-        handlerForBtnLink('https://www.mk.ru/rss/news/index.xml', e.target);
+    btnLink2.addEventListener('click', () => {
+        handlerForBtnLink('https://www.mk.ru/rss/news/index.xml');
     });
 
     const proxyLink = 'https://cors-anywhere.herokuapp.com/';
@@ -70,7 +68,7 @@ export default () => {
         state.inputProcess.submitDisabled = true;
         state.inputProcess.inputDisabled = true;
         state.userInformation = 'please, standby';
-        state.spinner = true;
+        state.exampelButtons = 'disabled';
 
         axios.get(`${proxyLink}${inputForLink.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
             .then(({ data }) => {
@@ -82,15 +80,15 @@ export default () => {
                 inputForLink.value = '';
                 state.inputProcess.inputDisabled = false;
                 state.inputProcess.submitDisabled = false;
-                state.spinner = false;
                 state.userInformation = 'Loaded';
                 state.updateChannel = true;
+                state.exampelButtons = 'active';
             })
             .catch((err) => {
                 state.userInformation = 'Oops, something went wrong danger';
                 state.inputProcess.inputDisabled = false;
                 state.inputProcess.submitDisabled = true;
-                state.spinner = false;
+                state.exampelButtons = 'active';
                 console.log(err);
             });
     });
@@ -135,4 +133,5 @@ document.querySelector('#submit').click();
     watch(state, 'channels', () => renders.channel(state));
     watch(state, 'modal', () => renders.modalContent(state));
     watch(state, 'updateChannel', () => setTimeout(updateChannel, 5000));
+    watch(state, 'exampelButtons', () => renders.exampelButtons(state));
 };
