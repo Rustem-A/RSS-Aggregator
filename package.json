@@ -6,7 +6,8 @@
   "homepage": "https://github.com/Rustem-A/RSS-Aggregator#readme",
   "scripts": {
     "test": "jest",
-    "babel-node": "babel-node"
+    "babel-node": "babel-node",
+    "webpack": "webpack"
   },
   "repository": {
     "type": "git",
