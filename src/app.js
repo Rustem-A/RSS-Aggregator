@@ -21,28 +21,49 @@ export default () => {
             description: '',
         },
         updateChannel: false,
+        submitClick: false,
     };
 
-    const inputForLink = document.body.querySelector('#inputForLink');
-    inputForLink.addEventListener('input', (e) => {
-        e.preventDefault();
-        if (!validator.isURL(e.target.value)) {
+    const validate = () => {
+        if (!validator.isURL(inputForLink.value)) {
             state.inputProcess.submitDisabled = true;
             state.userInformation = 'invalid url format danger';
             state.inputProcess.valid = 'invalid';
         } else if (state.articleLinks.has(inputForLink.value)) {
             state.userInformation = 'A channel with such url has already been added danger';
             state.inputProcess.valid = 'invalid';
-            state.inputProcess.disabledSubmit = true;
+            state.inputProcess.submitDisabled = true;
         } else {
             state.inputProcess.submitDisabled = false;
             state.userInformation = '';
             state.inputProcess.valid = 'valid';
         }
+    };
+
+    const inputForLink = document.body.querySelector('#inputForLink');
+    inputForLink.addEventListener('input', (e) => {
+        e.preventDefault();
+        validate();
+    });
+
+    const btnLink1 = document.getElementById('Examle#1');
+    const btnLink2 = document.getElementById('Examle#2');
+    const handlerForBtnLink = (url, target) => {
+        inputForLink.focus();
+        inputForLink.value = url;
+        validate();
+        target.setAttribute('disabled', '');
+        document.querySelector('#submit').click();
+    };
+    btnLink1.addEventListener('click', (e) => {
+        handlerForBtnLink('https://lenta.ru/rss/news', e.target);
+    });
+    btnLink2.addEventListener('click', (e) => {
+        handlerForBtnLink('https://www.mk.ru/rss/news/index.xml', e.target);
     });
 
     const proxyLink = 'https://cors-anywhere.herokuapp.com/';
-    
+
     const form = document.body.querySelector('form');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -50,7 +71,7 @@ export default () => {
         state.inputProcess.inputDisabled = true;
         state.userInformation = 'please, standby';
         state.spinner = true;
-        
+
         axios.get(`${proxyLink}${inputForLink.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
             .then(({ data }) => {
                 const dataDocument = parseRss(data, inputForLink.value);
@@ -58,6 +79,7 @@ export default () => {
             })
             .then(() => {
                 state.articleLinks.add(inputForLink.value);
+                inputForLink.value = '';
                 state.inputProcess.inputDisabled = false;
                 state.inputProcess.submitDisabled = false;
                 state.spinner = false;
@@ -66,13 +88,13 @@ export default () => {
             })
             .catch((err) => {
                 state.userInformation = 'Oops, something went wrong danger';
-                state.inputProcess.disabledInput = false;
-                state.inputProcess.disabledSubmit = true;
+                state.inputProcess.inputDisabled = false;
+                state.inputProcess.submitDisabled = true;
                 state.spinner = false;
                 console.log(err);
             });
     });
-
+document.querySelector('#submit').click();
     $('#modal')
         .on('show.bs.modal', (event) => {
             const button = $(event.relatedTarget);
