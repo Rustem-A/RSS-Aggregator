@@ -1,13 +1,12 @@
 import validator from 'validator';
-import axios from 'axios';
 import { watch } from 'melanke-watchjs';
 import $ from 'jquery';
 
 import * as renders from './renders/index.js';
-import parseRss from './parsers/parseRss';
 import scrollUp from './scrollUp.js';
+import axiosGet from './axiosGet.js';
 
-export default () => {
+export default (ajaxFoo = axiosGet) => {
     const state = {
         userInformation: '',
         inputProcess: {
@@ -42,7 +41,7 @@ export default () => {
     };
 
     scrollUp();
-    
+
     const inputForLink = document.body.querySelector('#inputForLink');
     inputForLink.addEventListener('input', (e) => {
         e.preventDefault();
@@ -63,8 +62,6 @@ export default () => {
         handlerForBtnLink('https://www.mk.ru/rss/news/index.xml');
     });
 
-    const proxyLink = 'https://cors-anywhere.herokuapp.com/';
-
     const form = document.body.querySelector('form');
     form.addEventListener('submit', (e) => {
         e.preventDefault();
@@ -73,12 +70,9 @@ export default () => {
         state.userInformation = 'please, standby';
         state.exampelButtons = 'disabled';
 
-        axios.get(`${proxyLink}${inputForLink.value}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-            .then(({ data }) => {
-                const dataDocument = parseRss(data, inputForLink.value);
+        ajaxFoo(inputForLink.value)
+            .then((dataDocument) => {
                 state.channels = [dataDocument, ...state.channels];
-            })
-            .then(() => {
                 state.articleLinks.add(inputForLink.value);
                 inputForLink.value = '';
                 state.inputProcess.inputDisabled = false;
@@ -95,7 +89,7 @@ export default () => {
                 console.log(err);
             });
     });
-document.querySelector('#submit').click();
+    document.querySelector('#submit').click();
     $('#modal')
         .on('show.bs.modal', (event) => {
             const button = $(event.relatedTarget);
@@ -105,8 +99,7 @@ document.querySelector('#submit').click();
 
     const updateChannel = () => {
         state.channels.forEach(({ linkChannel, linksNews, news, }) => {
-            axios.get(`${proxyLink}${linkChannel}`, { headers: { 'Access-Control-Allow-Origin': '*' } })
-                .then(({ data }) => parseRss(data, linkChannel))
+            ajaxFoo(linkChannel)
                 .then((data) => {
                     const linksNewsData = data.linksNews;
                     const newsData = data.news;
