@@ -1,9 +1,6 @@
 deploy:
 	cd dist/; surge --domain rss_aggregator.surge.sh
 
-dev:
-	webpack-dev-server --inline --hot
-
 install:
 	npm install
 
